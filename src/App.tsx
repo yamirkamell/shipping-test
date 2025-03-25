@@ -1,18 +1,29 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { login } from './pages/login/state/authState';
 import Home from './pages/home';
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { ProtectedRoute } from './components/protected-route';
+import Register from './pages/register';
+import Login from './pages/login';
 
-function App() {
-  const { isAuthenticated } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch();
-
+const App = () => {
+  
   return (
-    <div>
-      {isAuthenticated ? (
-        <Home />
-      ) : (
-        <button onClick={() => dispatch(login({ name: "Jane Doe" }))}>Login</button>
-      )}
+    <div style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <Routes>
+        <Route path="*" element={<Navigate to={"/login"} replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
     </div>
   );
 }
